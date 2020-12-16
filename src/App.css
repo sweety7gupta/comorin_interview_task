@@ -37,12 +37,19 @@
   }
 }
 
+.container {
+  width: 600px;
+  margin: auto;
+}
+
 .employee-table {
   display: table;
+  padding: 10px 0 30px 0;
 }
 
 .header {
   display: table-row;
+  background-color: #e5e5e5;
 }
 
 .header-field {
@@ -60,8 +67,23 @@
 .row-field {
   display: table-cell;
   padding: 10px 20px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .row-image-field {
   display: table-cell;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.search-input{
+  margin: 20px 0;
+  width: 260px;
+  height: 30px;
+  font-size: 16px;
+  padding: 4px 12px;
+}
+
+.note {
+  font-size: 12px;
+  text-align: left;
 }

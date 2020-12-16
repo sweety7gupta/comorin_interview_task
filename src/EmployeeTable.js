@@ -7,8 +7,9 @@ const sortableColumns = ['id', 'name', 'grade', 'active'];
 export default class EmployeeTable extends React.Component {
     state = {
         employees: this.props.employees,
-        employeesToRender: this.props.employees,
         searchText: '',
+        sortKey: 'id',
+        sortAsc: true,
     };
 
     getEmployeesToRender = () => {
@@ -62,11 +63,7 @@ export default class EmployeeTable extends React.Component {
 
     handleSearchTextChange = (event) => {
         const { value } = event.target;
-        const searchText = value.trim();
-
-        this.setState({
-            searchText: value
-        });
+        this.setState({ searchText: value });
     };
 
     handleSorting = (key) => {
@@ -86,13 +83,16 @@ export default class EmployeeTable extends React.Component {
         const { searchText, sortKey, sortAsc } = this.state;
 
         return (
-            <React.Fragment>
+            <div className="container">
                 <input
                     type="text"
                     placeholder="Search by employee name"
+                    className="search-input"
                     value={searchText}
                     onChange={this.handleSearchTextChange}
                 />
+
+                <div className="note">Data sortable based on ID, Name, Grade and Active columns</div>
 
                 <div className="employee-table">
                     <EmployeeHeader onSort={this.handleSorting} sortKey={sortKey} sortAsc={sortAsc} />
@@ -104,7 +104,7 @@ export default class EmployeeTable extends React.Component {
                         />
                     ))}
                 </div>
-            </React.Fragment>
+            </div>
         )
     }
 }
