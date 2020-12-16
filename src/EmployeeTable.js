@@ -2,6 +2,8 @@ import React from 'react';
 import EmployeeHeader from './EmployeeHeader';
 import EmployeeRow from './EmployeeRow';
 
+const sortableColumns = ['id', 'name', 'grade', 'active'];
+
 export default class EmployeeTable extends React.Component {
     state = {
         employees: this.props.employees,
@@ -10,14 +12,30 @@ export default class EmployeeTable extends React.Component {
     };
 
     getEmployeesToRender = () => {
-        const { employees, searchText } = this.state;
+        const { employees, searchText, sortKey, sortAsc } = this.state;
         const text = searchText && searchText.toLowerCase();
 
         const filteredEmployees = employees.filter((emp) =>
             emp.name.toLowerCase().indexOf(text) > -1
         );
 
-        return filteredEmployees;
+        const sortedEmployees = filteredEmployees.sort((a, b) => {
+            if (sortAsc) {
+                if (typeof a[sortKey] === 'string') {
+                    return a[sortKey].localeCompare(b[sortKey]);
+                } else {
+                    return a[sortKey] - b[sortKey];
+                }
+            } else {
+                if (typeof a[sortKey] === 'string') {
+                    return b[sortKey].localeCompare(a[sortKey]);
+                } else {
+                    return b[sortKey] - a[sortKey];
+                }
+            }
+        });
+
+        return sortedEmployees;
     };
 
     handleEmployeeStatusChange = (employee) => {
@@ -51,8 +69,21 @@ export default class EmployeeTable extends React.Component {
         });
     };
 
+    handleSorting = (key) => {
+        if (sortableColumns.indexOf(key) <= -1) {
+            return;
+        }
+
+        const { sortKey } = this.state;
+
+        this.setState({
+            sortKey: key,
+            sortAsc: sortKey === key ? !this.state.sortAsc : true,
+        });
+    };
+
     render() {
-        const { searchText } = this.state;
+        const { searchText, sortKey, sortAsc } = this.state;
 
         return (
             <React.Fragment>
@@ -64,7 +95,7 @@ export default class EmployeeTable extends React.Component {
                 />
 
                 <div className="employee-table">
-                    <EmployeeHeader />
+                    <EmployeeHeader onSort={this.handleSorting} sortKey={sortKey} sortAsc={sortAsc} />
 
                     {this.getEmployeesToRender().map(employee => (
                         <EmployeeRow
